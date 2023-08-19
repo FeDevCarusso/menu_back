@@ -37,7 +37,9 @@ export async function register_controller(req, res) {
             name, email, password, restaurantName
         })
         const newUserData = await Userdata.create()
-        const newRestaurant = await Restaurant.create()
+        const newRestaurant = await Restaurant.create({
+            restaurantName: restaurantName
+        })
 
         await newUserData.setRestaurant(newRestaurant)
         await newUser.setUserdatum(newUserData)

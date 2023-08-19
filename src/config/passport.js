@@ -22,7 +22,7 @@ const passportLocal = new LocalStrategy(async function (username, password, done
                 return done(null, false, { message: "Contraseña incorrecta" })
             }
 
-            return done(null, { id: user.id }, { message: "Inicio de sesión correcto" })
+            return done(null, { id: user.id, restaurantName: user.restaurantName }, { message: "Inicio de sesión correcto" })
         })
     } catch (error) {
         done(error)

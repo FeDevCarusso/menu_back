@@ -1,14 +1,20 @@
+import { Horarios } from "../config/classes.js";
 import sequelize from "../config/database.js";
 
-import { Model } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
 
 
 class Restaurant extends Model { }
 
-Restaurant.init({}, { sequelize: sequelize })
+Restaurant.init({
+    restaurantName: { type: DataTypes.STRING, allowNull: false },
+    businessHours: {
+        type: DataTypes.JSON(DataTypes.JSON),
+        defaultValue: new Horarios()
+    }
+}, { sequelize: sequelize })
 
-Restaurant.afterSave(function(u) {
-    console.log("Restaurant created")
+Restaurant.afterSave(function (u) {
 })
 
 export default Restaurant
