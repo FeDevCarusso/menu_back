@@ -9,6 +9,10 @@ import passport from 'passport'
 import session from 'express-session'
 import configurePassport from './src/config/passport.js'
 import auth_routes from './src/routes/auth.routes.js'
+import Userdata from './src/models/userdata.model.js'
+import Restaurant from './src/models/restaurant.model.js'
+import RestaurantCategory from './src/models/restaurant.category.js'
+import user_routes from './src/routes/user.routes.js'
 
 config({
     path: "./.env"
@@ -36,11 +40,17 @@ app.use(passport.session())
 configurePassport()
 
 app.use("/auth", auth_routes)
+app.use("/user", user_routes)
+
 
 const { PORT } = process.env
 sequelize.authenticate().then(async function () {
     setRelations()
     await User.sync({ force: true })
+    await Userdata.sync({ force: true })
+    await Restaurant.sync({ force: true })
+    await RestaurantCategory.sync({ force: true })
+    
     console.log("Database working")
     app.listen(PORT || 3002, () => console.log(`Server running on port ${PORT || 3002}`))
 })

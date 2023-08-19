@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize'
 import sequelize from '../config/database.js'
-
 class Userdata extends Model { }
 
 Userdata.init({
@@ -17,9 +16,10 @@ Userdata.init({
         type: DataTypes.DATE,
         defaultValue: new Date()
     }
-}, { sequelize: sequelize })
+}, { sequelize: sequelize, modelName: "Userdata" })
 
-
-
+Userdata.afterSave(function(u) {
+    console.log("userdata created")
+})
 
 export default Userdata

@@ -28,7 +28,7 @@ User.init({
     }
 }, { sequelize: sequelize })
 
-User.beforeSave(async function (user, options) {
+User.beforeSave(async function (user) {
     try {
         const hash = await bcrypt.hash(user.password, 10)
         user.password = hash
@@ -36,5 +36,6 @@ User.beforeSave(async function (user, options) {
         throw new Error(error)
     }
 })
+
 
 export default User

@@ -3,6 +3,8 @@ import User from "../models/user.model.js"
 import responses from '../middlewares/responses.js'
 import { validationResult } from 'express-validator'
 import passport from 'passport'
+import Userdata from '../models/userdata.model.js'
+import Restaurant from '../models/restaurant.model.js'
 
 export async function register_controller(req, res) {
     try {
@@ -34,6 +36,13 @@ export async function register_controller(req, res) {
         const newUser = await User.create({
             name, email, password, restaurantName
         })
+        const newUserData = await Userdata.create()
+        const newRestaurant = await Restaurant.create()
+
+        await newUserData.setRestaurant(newRestaurant)
+        await newUser.setUserdatum(newUserData)
+
+        console.log("usercreated")
 
         if (!newUser) {
             return res.status(500).json(responses(false, "Se produjo un error en el servidor. Reintentá"))

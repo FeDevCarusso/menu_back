@@ -8,7 +8,7 @@ export default function is_login(req, res) {
 export async function validate_auth(req, res, next) {
     const isAuthenticated = req.isAuthenticated()
     if (!isAuthenticated) {
-        return res.status(401).json(responses(isAuthenticated))
+        return res.status(401).json(responses(isAuthenticated, "Iniciá sesión para continuar"))
     }
     return next()
 }
