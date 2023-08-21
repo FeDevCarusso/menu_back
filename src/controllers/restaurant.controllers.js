@@ -3,6 +3,7 @@ import responses from "../middlewares/responses.js"
 import Food from "../models/food.model.js"
 import RestaurantCategory from "../models/restaurant.category.js"
 import Restaurant from "../models/restaurant.model.js"
+import sequelize from "../config/database.js"
 
 export async function get_public_restaurant(req, res) {
     try {
@@ -12,7 +13,7 @@ export async function get_public_restaurant(req, res) {
             where: {
                 restaurantName: { [Op.iLike]: `%${restaurant}%` }
             },
-            attributes: ["id", "restaurantName", "businessHours"]
+            attributes: ["id", "restaurantName", "restaurantImage", "businessHours"]
         })
 
         if (!currentResto) {
@@ -26,7 +27,7 @@ export async function get_public_restaurant(req, res) {
             attributes: ["name"],
             include: {
                 model: Food,
-                attributes: ["name", "ingredients", "price",]
+                attributes: ["name", "ingredients", "price", "image"]
             },
             order: [["name", "ASC"]]
         })
@@ -48,12 +49,18 @@ export async function find_restaurants(req, res) {
             where: {
                 restaurantName: { [Op.iLike]: `%${restaurant}%` }
             },
-
+            include: {
+                model: RestaurantCategory,
+                attributes: ["name"],
+                order: [sequelize.fn('CHAR_LENGTH', sequelize.col("name")), "asc"]
+            },
+            attributes: ["restaurantName", "restaurantImage"]
         })
 
         if (!currentResto) {
             return res.status(400).json(responses(null, "No se encontro el restaurante"))
         }
+
 
         return res.json(currentResto)
     } catch (error) {

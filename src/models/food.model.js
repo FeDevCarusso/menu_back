@@ -15,6 +15,11 @@ Food.init({
     price: {
         type: DataTypes.FLOAT,
         defaultValue: 0
+    },
+    
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 }, { sequelize: sequelize })
 

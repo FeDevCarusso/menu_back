@@ -12,6 +12,10 @@ Restaurant.init({
         type: DataTypes.JSON(DataTypes.JSON),
         defaultValue: new Horarios(),
         allowNull: false
+    },
+    restaurantImage: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 }, { sequelize: sequelize })
 

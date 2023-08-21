@@ -5,6 +5,7 @@ import { validationResult } from "express-validator"
 import RestaurantCategory from "../models/restaurant.category.js"
 import Food from "../models/food.model.js"
 
+
 export async function get_user_info(req, res) {
     try {
         const user = await User.findOne({
@@ -92,6 +93,7 @@ export async function create_category(req, res) {
 export async function add_food(req, res) {
     try {
         const { restaurantName } = req?.user
+        const image = req?.file?.filename
         const { name, ingredients, price, cat } = req.body
 
         const errors = validationResult(req)
@@ -121,14 +123,38 @@ export async function add_food(req, res) {
 
         const newFood = await Food.create({
             name,
-            ingredients,
-            price
+            ingredients: ingredients.split(","),
+            price,
+            image
         })
 
         await newFood.setRestaurantCategory(category)
 
         return res.json(responses(true, "Añadido con exito"))
 
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export async function editRestaurantImage(req, res) {
+    try {
+        const image = req?.file?.filename
+        const { restaurantName } = req?.user
+
+        const updated = await Restaurant.update({
+            restaurantImage: image
+        }, {
+            where: {
+                restaurantName: restaurantName
+            }
+        })
+
+        if (!updated) {
+            return res.status(500).json(responses(false, "Error al cambiar imagen, reintentá"))
+        }
+
+        return res.json(responses(true, "Imagen cambiada con exito"))
     } catch (error) {
         throw new Error(error)
     }
