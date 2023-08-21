@@ -1,7 +1,7 @@
 import { Router } from "express"
-import { login_controller, register_controller } from "../controllers/auth.controller.js"
+import { login_controller, logout_controller, register_controller } from "../controllers/auth.controller.js"
 import { body } from "express-validator"
-import is_login from "../middlewares/isLogin.js"
+import is_login, { validate_auth } from "../middlewares/isLogin.js"
 
 const auth_routes = Router()
 
@@ -57,5 +57,6 @@ const loginRules = [
 auth_routes.post("/register", registerRules, register_controller)
 auth_routes.post("/login", loginRules, login_controller)
 auth_routes.get("/is_login", is_login)
+auth_routes.get("/logout", validate_auth, logout_controller)
 
 export default auth_routes

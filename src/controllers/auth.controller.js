@@ -90,3 +90,17 @@ export async function login_controller(req, res, next) {
         throw new Error(error)
     }
 }
+
+export async function logout_controller (req,res) {
+    try {
+        req.logout(function(err) {
+            if (err) {
+                res.status(500).json(responses(false, "Se produjo un error."))
+                throw new Error(err)
+            }
+            return res.json(responses (true, "Cerraste sesión"))
+        })
+    } catch (error) {
+        throw new Error(error)
+    }
+}

@@ -1,6 +1,5 @@
 import { config } from "dotenv";
-import { Sequelize } from "sequelize";
-
+import { Sequelize } from 'sequelize'
 config()
 
 const { DATABASE } = process.env
