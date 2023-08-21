@@ -27,7 +27,7 @@ export async function get_public_restaurant(req, res) {
                 model: Food,
                 attributes: ["name"]
             },
-            order: [["name", "DESC"]]
+            order: [["name", "ASC"]]
         })
 
 
