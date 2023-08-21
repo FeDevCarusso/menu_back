@@ -26,10 +26,10 @@ export async function get_restaurant_info(req, res) {
             },
             include: {
                 model: RestaurantCategory,
-                attributes: ["name"]
+                attributes: ["name"],
             }
             ,
-            attributes: ["id", "restaurantName", "UserdatumId"]
+            attributes: ["id", "restaurantName", "businessHours", "UserdatumId"]
         })
 
         if (!restaurant) {

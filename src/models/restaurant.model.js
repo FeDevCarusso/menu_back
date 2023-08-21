@@ -10,7 +10,8 @@ Restaurant.init({
     restaurantName: { type: DataTypes.STRING, allowNull: false },
     businessHours: {
         type: DataTypes.JSON(DataTypes.JSON),
-        defaultValue: new Horarios()
+        defaultValue: new Horarios(),
+        allowNull: false
     }
 }, { sequelize: sequelize })
 

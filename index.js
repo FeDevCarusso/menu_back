@@ -54,7 +54,7 @@ sequelize.authenticate().then(async function () {
     await Restaurant.sync({ force: false })
     await RestaurantCategory.sync({ force: false })
     await Food.sync({ force: false })
-    
+
     console.log("Database working")
     app.listen(PORT || 3002, () => console.log(`Server running on port ${PORT || 3002}`))
 })
