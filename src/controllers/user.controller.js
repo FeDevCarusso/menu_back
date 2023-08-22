@@ -25,11 +25,7 @@ export async function get_restaurant_info(req, res) {
             where: {
                 restaurantName
             },
-            include: {
-                model: RestaurantCategory,
-                attributes: ["name"],
-            }
-            ,
+
             attributes: ["id", "restaurantName", "businessHours", "UserdatumId"]
         })
 
@@ -37,7 +33,12 @@ export async function get_restaurant_info(req, res) {
             return res.status(400).json(responses(null, "El restaurante no existe."))
         }
 
-        return res.status(200).json(responses(null, null, restaurant))
+        const returnData = {
+            horarios: restaurant?.businessHours?.horarios,
+            restaurantName: restaurant.restaurantName,
+        }
+
+        return res.status(200).json(responses(null, null, returnData))
     } catch (error) {
         throw new Error(error)
     }
@@ -71,13 +72,28 @@ export async function create_category(req, res) {
         const restaurant = await Restaurant.findOne({
             where: {
                 restaurantName
-            }
+            },
+            include: {
+                model: RestaurantCategory,
+                // attributes: []
+            },
+            attributes: ["id"]
         })
 
         if (!restaurant) {
             return res.status(400).json(responses(false, "El restaurante no existe"))
         }
 
+        let currentCats = await RestaurantCategory.findAll({
+            where: {
+                RestaurantId: restaurant?.id
+            }
+        })
+
+        const parsedCats = currentCats.map(x => x.dataValues?.name)
+        if (parsedCats.includes(name)) {
+            return res.status(409).json(responses(false, `La categoria ${name} ya existe`))
+        }
         const newCat = await RestaurantCategory.create({
             name
         })

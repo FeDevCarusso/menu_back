@@ -50,11 +50,11 @@ app.use("/images", express.static("uploads"))
 const { PORT } = process.env
 sequelize.authenticate().then(async function () {
     setRelations()
-    await User.sync({ force: true })
-    await Userdata.sync({ force: true })
-    await Restaurant.sync({ force: true })
-    await RestaurantCategory.sync({ force: true })
-    await Food.sync({ force: true })
+    await User.sync({ force: false })
+    await Userdata.sync({ force: false })
+    await Restaurant.sync({ force: false })
+    await RestaurantCategory.sync({ force: false })
+    await Food.sync({ force: false })
 
     console.log("Database working")
     app.listen(PORT || 3002, () => console.log(`Server running on port ${PORT || 3002}`))
