@@ -4,6 +4,7 @@ import Restaurant from "../models/restaurant.model.js"
 import { validationResult } from "express-validator"
 import RestaurantCategory from "../models/restaurant.category.js"
 import Food from "../models/food.model.js"
+import { response } from "express"
 
 
 export async function get_user_info(req, res) {
@@ -110,6 +111,7 @@ export async function add_food(req, res) {
     try {
         const { restaurantName } = req?.user
         const image = req?.file?.filename
+       console.log(req?.file)
         const { name, ingredients, price, cat } = req.body
 
         const errors = validationResult(req)
@@ -171,6 +173,32 @@ export async function editRestaurantImage(req, res) {
         }
 
         return res.json(responses(true, "Imagen cambiada con exito"))
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export async function get_cats(req, res) {
+    const { restaurantName } = req?.user
+    try {
+        const resto = await Restaurant.findOne({
+            where: {
+                restaurantName
+            },
+            attributes: ["id"]
+        })
+
+        if (!resto) {
+            res.status(500).json(responses(false, "Se produjo un error en el servidor."))
+            throw new Error(error)
+        }
+
+        const cats = await RestaurantCategory.findAll()
+        const cat_names = cats.map(function (cat) {
+            return cat.name
+        })
+        return res.json(responses(true, null, cat_names))
+
     } catch (error) {
         throw new Error(error)
     }
